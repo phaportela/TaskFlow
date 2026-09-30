@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const API_URL = 'http://localhost:5233/api/Tasks'
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+const API_URL = `${API_BASE_URL}/api/Tasks`
 
 const statusLabels = {
   0: 'Pendente',
@@ -19,7 +20,6 @@ function App() {
 
   const loadTasks = async () => {
     try {
-      setLoading(true)
       const response = await fetch(API_URL)
 
       if (!response.ok) {
@@ -36,7 +36,24 @@ function App() {
   }
 
   useEffect(() => {
-    loadTasks()
+    const loadInitialTasks = async () => {
+      try {
+        const response = await fetch(API_URL)
+
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar as tarefas.')
+        }
+
+        const data = await response.json()
+        setTasks(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadInitialTasks()
   }, [])
 
   const handleSubmit = async (event) => {

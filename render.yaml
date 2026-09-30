@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: taskflow
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /
+    envVars:
+      - key: ASPNETCORE_HTTP_PORTS
+        value: "10000"
+      - key: ConnectionStrings__DefaultConnection
+        value: "Data Source=/tmp/taskflow.db"
