@@ -10,6 +10,12 @@ const statusLabels = {
   2: 'Concluído',
 }
 
+const statusClasses = {
+  0: 'pending',
+  1: 'progress',
+  2: 'complete',
+}
+
 function App() {
   const [tasks, setTasks] = useState([])
   const [title, setTitle] = useState('')
@@ -17,6 +23,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const completedTasks = tasks.filter((task) => Number(task.status) === 2).length
 
   const loadTasks = async () => {
     try {
@@ -134,28 +141,61 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <h1>TaskFlow</h1>
+        <div className="brand-lockup">
+          <span className="brand-mark" aria-hidden="true">TF</span>
+          <div>
+            <p className="eyebrow">Painel de execução</p>
+            <h1>TaskFlow</h1>
+          </div>
+        </div>
+        <div className="date-stamp">Hoje · foco no que importa</div>
       </header>
 
-      <form className="task-form" onSubmit={handleSubmit}>
-        <div className="field-group">
-          <label htmlFor="title">Título</label>
-          <input
-            id="title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            placeholder="Ex: Estudar C#"
-          />
+      <section className="overview" aria-label="Resumo das tarefas">
+        <div>
+          <p className="section-kicker">Visão geral</p>
+          <h2>Organize o próximo movimento.</h2>
         </div>
+        <div className="overview-stats">
+          <div className="stat-item">
+            <strong>{tasks.length}</strong>
+            <span>Total</span>
+          </div>
+          <div className="stat-item accent-stat">
+            <strong>{completedTasks}</strong>
+            <span>Concluídas</span>
+          </div>
+        </div>
+      </section>
 
-        <div className="field-group">
-          <label htmlFor="description">Descrição</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="Descreva a tarefa"
-          />
+      <form className="task-form" onSubmit={handleSubmit}>
+        <div className="form-heading">
+          <span className="form-icon" aria-hidden="true">+</span>
+          <div>
+            <p className="section-kicker">Nova tarefa</p>
+            <h2>O que precisa acontecer?</h2>
+          </div>
+        </div>
+        <div className="form-fields">
+          <div className="field-group">
+            <label htmlFor="title">Título</label>
+            <input
+              id="title"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Ex: Estudar C#"
+            />
+          </div>
+
+          <div className="field-group">
+            <label htmlFor="description">Descrição <span>Opcional</span></label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Adicione uma nota curta"
+            />
+          </div>
         </div>
 
         <button type="submit" disabled={saving}>
@@ -163,38 +203,54 @@ function App() {
         </button>
       </form>
 
-      {error && <div className="error-box">{error}</div>}
+      {error && <div className="error-box" role="alert">{error}</div>}
 
       <section className="task-section">
-        <h2>Minhas tarefas</h2>
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">Seu espaço de trabalho</p>
+            <h2>Minhas tarefas</h2>
+          </div>
+          <span className="task-count">{tasks.length} {tasks.length === 1 ? 'item' : 'itens'}</span>
+        </div>
 
         {loading ? (
-          <p>Carregando tarefas...</p>
+          <div className="empty-state loading-state"><span className="loader" />Carregando tarefas...</div>
         ) : tasks.length === 0 ? (
-          <p>Nenhuma tarefa cadastrada.</p>
+          <div className="empty-state">
+            <span className="empty-mark" aria-hidden="true">—</span>
+            <strong>Nenhuma tarefa por aqui.</strong>
+            <p>Comece adicionando algo que você quer tirar do caminho.</p>
+          </div>
         ) : (
           <ul className="task-list">
             {tasks.map((task) => (
               <li key={task.id} className="task-item">
                 <div className="task-content">
-                  <strong>{task.title}</strong>
+                  <div className="task-title-row">
+                    <span className={`status-dot ${statusClasses[task.status]}`} />
+                    <strong>{task.title}</strong>
+                  </div>
                   <p>{task.description || 'Sem descrição.'}</p>
                 </div>
 
                 <div className="task-actions">
-                  <select
-                    value={task.status}
-                    onChange={(event) => handleStatusChange(task, event.target.value)}
-                  >
-                    {Object.entries(statusLabels).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className={`status-select ${statusClasses[task.status]}`}>
+                    <span className="sr-only">Status da tarefa</span>
+                    <select
+                      value={task.status}
+                      onChange={(event) => handleStatusChange(task, event.target.value)}
+                    >
+                      {Object.entries(statusLabels).map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
 
                   <button className="delete-btn" onClick={() => handleDelete(task.id)}>
-                    Excluir
+                    Remover
                   </button>
                 </div>
               </li>
