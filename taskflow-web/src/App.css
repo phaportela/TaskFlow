@@ -1,0 +1,146 @@
+.app-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  font-family: Arial, sans-serif;
+}
+
+.topbar {
+  margin-bottom: 24px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #1f2937;
+}
+
+.task-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-group label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.field-group input,
+.field-group textarea,
+.task-actions select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+}
+
+.field-group textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.task-form button,
+.delete-btn {
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.task-form button {
+  background: #2563eb;
+  color: white;
+  padding: 12px 18px;
+}
+
+.task-section {
+  margin-top: 28px;
+}
+
+.task-section h2 {
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.task-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-content strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.task-content p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-actions select {
+  background: #f3f4f6;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  padding: 10px 12px;
+}
+
+.error-box {
+  margin-top: 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+@media (max-width: 640px) {
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

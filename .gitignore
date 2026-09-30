@@ -1,0 +1,18 @@
+# Build output
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+
+# Local SQLite database
+*.db
+*.db-shm
+*.db-wal
+
+# Local configuration and editor files
+*.user
+*.suo
+.vs/
+.env
+.env.*
+!.env.example
